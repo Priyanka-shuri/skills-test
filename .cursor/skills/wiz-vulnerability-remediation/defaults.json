@@ -1,0 +1,9 @@
+{
+  "githubOwner": "MYOB-Technology",
+  "defaultBranch": "main",
+  "severityMin": "HIGH",
+  "statuses": ["OPEN", "IN_PROGRESS"],
+  "maxFindingsPerPr": 10,
+  "prBranchPrefix": "fix/wiz",
+  "draftPr": false
+}
