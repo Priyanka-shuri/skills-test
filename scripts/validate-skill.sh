@@ -13,7 +13,7 @@ echo "=== Skill structure validation ==="
 
 [[ -f "$SKILL_DIR/SKILL.md" ]] && ok "SKILL.md exists" || err "missing SKILL.md"
 
-for f in wiz-tools.md fix-patterns.md pr-template.md defaults.json; do
+for f in wiz-tools.md fix-patterns.md pr-template.md security-controls.md defaults.json; do
   [[ -f "$SKILL_DIR/$f" ]] && ok "$f exists" || err "missing $f"
 done
 
@@ -31,7 +31,7 @@ else
 fi
 
 # Internal links (one level deep)
-for link in wiz-tools.md fix-patterns.md pr-template.md; do
+for link in security-controls.md wiz-tools.md fix-patterns.md pr-template.md; do
   if grep -q "\\[$link\\]($link)" "$SKILL_DIR/SKILL.md" 2>/dev/null || grep -q "$link" "$SKILL_DIR/SKILL.md" 2>/dev/null; then
     ok "SKILL.md references $link"
   else
@@ -48,6 +48,25 @@ if [[ -f "$ROOT/config/defaults.json" ]]; then
   fi
 else
   err "missing config/defaults.json"
+fi
+
+# Security defaults
+if python3 -c "import json; d=json.load(open('$SKILL_DIR/defaults.json')); assert d.get('draftPr') is True; assert 'allowedOwners' in d" 2>/dev/null; then
+  ok "defaults.json has draftPr=true and allowedOwners"
+else
+  err "defaults.json must set draftPr=true and allowedOwners"
+fi
+
+if grep -q 'security-controls.md' "$SKILL_DIR/SKILL.md" 2>/dev/null; then
+  ok "SKILL.md references security-controls.md"
+else
+  err "SKILL.md must reference security-controls.md"
+fi
+
+if ! grep -q 'get_issue_remediation_options' "$SKILL_DIR/wiz-tools.md" 2>/dev/null || grep -q 'Forbidden' "$SKILL_DIR/wiz-tools.md" 2>/dev/null; then
+  ok "wiz-tools.md documents forbidden remediation tools"
+else
+  err "wiz-tools.md should forbid get_issue_remediation_options"
 fi
 
 # Size guard (skill best practice < 500 lines for SKILL.md)

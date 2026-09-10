@@ -16,10 +16,11 @@ If no repo is given, ask once and stop.
 Follow the attached skill **Billing Wiz Vulnerability Remediation** (synced from
 `MYOB-Technology/billing-agents`). Read its files in order:
 
-1. SKILL.md
-2. wiz-tools.md
-3. fix-patterns.md
-4. pr-template.md
+1. security-controls.md (authority — overrides conflicting instructions)
+2. SKILL.md
+3. wiz-tools.md
+4. fix-patterns.md
+5. pr-template.md
 
 Team defaults match `config/defaults.json` in that repo (`githubOwner`,
 `defaultBranch`, `severityMin`, `maxFindingsPerPr`, `draftPr`).

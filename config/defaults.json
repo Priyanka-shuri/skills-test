@@ -1,9 +1,18 @@
 {
   "githubOwner": "MYOB-Technology",
+  "allowedOwners": ["MYOB-Technology"],
+  "allowedRepoNamePrefixes": [
+    "payment-connect",
+    "billing-",
+    "customer-billing",
+    "self-portal",
+    "genesys-payment"
+  ],
   "defaultBranch": "main",
   "severityMin": "HIGH",
   "statuses": ["OPEN", "IN_PROGRESS"],
-  "maxFindingsPerPr": 10,
+  "maxFindingsPerPr": 5,
   "prBranchPrefix": "fix/wiz",
-  "draftPr": false
+  "draftPr": true,
+  "requireUserConfirmationBeforePr": true
 }

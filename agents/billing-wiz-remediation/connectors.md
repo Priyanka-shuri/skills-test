@@ -3,7 +3,7 @@
 Model providers cap tools at **128**. Attach only the tools below — resolve
 `server_id` with `list_servers` (match on server name; do not guess UUIDs).
 
-## Wiz
+## Wiz (read-only allowlist)
 
 | Tool |
 |------|
@@ -12,8 +12,8 @@ Model providers cap tools at **128**. Attach only the tools below — resolve
 | `list_iac_findings` |
 | `get_vulnerability_finding` |
 | `get_vulnerability_catalog` |
-| `vulnerability_finding_triage_skill` |
-| `get_issue_remediation_options` |
+
+Do **not** attach nested Wiz skills or `get_issue_remediation_options`.
 
 ## GitHub
 

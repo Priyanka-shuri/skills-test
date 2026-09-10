@@ -83,8 +83,11 @@ Team defaults: [`config/defaults.json`](config/defaults.json)
 | `githubOwner` | `MYOB-Technology` | Owner when only repo short name is given |
 | `defaultBranch` | `main` | PR base branch |
 | `severityMin` | `HIGH` | Minimum severity to fix |
-| `maxFindingsPerPr` | `10` | Cap per pull request |
-| `draftPr` | `false` | Open as draft PR |
+| `allowedOwners` | `["MYOB-Technology"]` | GitHub org allowlist |
+| `allowedRepoNamePrefixes` | billing repo prefixes | Repo name allowlist |
+| `maxFindingsPerPr` | `5` | Cap per pull request |
+| `draftPr` | `true` | Draft PR by default |
+| `requireUserConfirmationBeforePr` | `true` | Confirm before GitHub writes |
 
 Override in the prompt: `MEDIUM+`, `base branch develop`, `draft PR`, `max 3 findings`.
 
