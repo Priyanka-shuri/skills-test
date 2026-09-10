@@ -83,8 +83,7 @@ Team defaults: [`config/defaults.json`](config/defaults.json)
 | `githubOwner` | `MYOB-Technology` | Owner when only repo short name is given |
 | `defaultBranch` | `main` | PR base branch |
 | `severityMin` | `HIGH` | Minimum severity to fix |
-| `allowedOwners` | `["MYOB-Technology"]` | GitHub org allowlist |
-| `allowedRepoNamePrefixes` | billing repo prefixes | Repo name allowlist |
+| `allowedRepoNamePrefixes` | billing repo prefixes | Repo name filter (owner is always `MYOB-Technology`) |
 | `maxFindingsPerPr` | `5` | Cap per pull request |
 | `draftPr` | `true` | Draft PR by default |
 | `requireUserConfirmationBeforePr` | `true` | Confirm before GitHub writes |
@@ -93,10 +92,10 @@ Override in the prompt: `MEDIUM+`, `base branch develop`, `draft PR`, `max 3 fin
 
 ### What it does
 
-1. Queries Wiz (your credentials) for open findings on the target repo.
-2. Triages fixable SCA / IaC issues with vendor fixes available.
-3. Updates dependency manifests (Gradle, npm, Maven, Docker, etc.).
-4. Creates a branch and opens a **PR for review** — never merges.
+**Runlayer org skill (published):** Wiz findings report for one billing repo.
+
+**Cursor symlink (full skill):** Same report, plus optional remediation via
+`remediate.md` — manifest updates and a draft PR when you ask to fix.
 
 ### What it does not do
 

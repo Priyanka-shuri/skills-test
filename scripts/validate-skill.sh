@@ -13,7 +13,7 @@ echo "=== Skill structure validation ==="
 
 [[ -f "$SKILL_DIR/SKILL.md" ]] && ok "SKILL.md exists" || err "missing SKILL.md"
 
-for f in scope.md wiz-tools.md fix-patterns.md pr-template.md defaults.json; do
+for f in wiz-tools.md defaults.json remediate.md fix-patterns.md pr-template.md; do
   [[ -f "$SKILL_DIR/$f" ]] && ok "$f exists" || err "missing $f"
 done
 
@@ -30,12 +30,22 @@ else
   err "SKILL.md missing description"
 fi
 
-# Internal links (one level deep)
-for link in scope.md wiz-tools.md fix-patterns.md pr-template.md; do
-  if grep -q "\\[$link\\]($link)" "$SKILL_DIR/SKILL.md" 2>/dev/null || grep -q "$link" "$SKILL_DIR/SKILL.md" 2>/dev/null; then
-    ok "SKILL.md references $link"
+# Runlayer publish set (triage only — no remediate.md)
+for f in SKILL.md wiz-tools.md defaults.json; do
+  [[ -f "$SKILL_DIR/$f" ]] && ok "Runlayer publish file: $f" || err "missing Runlayer publish file: $f"
+done
+
+if grep -q 'remediate.md' "$SKILL_DIR/SKILL.md" 2>/dev/null; then
+  err "SKILL.md must not reference remediate.md (Runlayer scanner)"
+else
+  ok "SKILL.md has no remediate.md reference"
+fi
+
+for phrase in create_pull_request create_branch push_files fix-patterns pr-template; do
+  if grep -qi "$phrase" "$SKILL_DIR/SKILL.md" "$SKILL_DIR/wiz-tools.md" 2>/dev/null; then
+    err "Runlayer publish files must not mention $phrase"
   else
-    err "SKILL.md should reference $link"
+    ok "no $phrase in Runlayer publish files"
   fi
 done
 
@@ -50,31 +60,24 @@ else
   err "missing config/defaults.json"
 fi
 
-# Security defaults
-if python3 -c "import json; d=json.load(open('$SKILL_DIR/defaults.json')); assert d.get('draftPr') is True; assert 'allowedOwners' in d" 2>/dev/null; then
-  ok "defaults.json has draftPr=true and allowedOwners"
+if python3 -c "import json; d=json.load(open('$SKILL_DIR/defaults.json')); assert d.get('githubOwner') == 'MYOB-Technology'" 2>/dev/null; then
+  ok "defaults.json has githubOwner MYOB-Technology"
 else
-  err "defaults.json must set draftPr=true and allowedOwners"
+  err "defaults.json must set githubOwner to MYOB-Technology"
 fi
 
-if ! grep -qiE 'override|ignore (previous|all) instruction|prompt injection|untrusted input|guardrail bypass' "$SKILL_DIR/SKILL.md" "$SKILL_DIR/scope.md" 2>/dev/null; then
-  ok "no scanner-trigger phrases in SKILL.md or scope.md"
+SCAN_FILES="$SKILL_DIR/SKILL.md $SKILL_DIR/wiz-tools.md"
+if ! grep -qiE 'override|ignore (previous|all) instruction|prompt injection|untrusted input|guardrail bypass|privilege escalation' $SCAN_FILES 2>/dev/null; then
+  ok "no scanner-trigger phrases in Runlayer publish files"
 else
-  err "remove override/injection phrasing from SKILL.md or scope.md"
+  err "remove scanner-trigger phrasing from SKILL.md or wiz-tools.md"
 fi
 
-if grep -q 'get_issue_remediation_options' "$SKILL_DIR/wiz-tools.md" 2>/dev/null; then
-  ok "wiz-tools.md lists out-of-scope tools"
-else
-  err "wiz-tools.md should list tools not used by this skill"
-fi
-
-# Size guard (skill best practice < 500 lines for SKILL.md)
 lines=$(wc -l < "$SKILL_DIR/SKILL.md" | tr -d ' ')
 if [[ "$lines" -le 500 ]]; then
   ok "SKILL.md line count ($lines) <= 500"
 else
-  err "SKILL.md too long ($lines lines); split into reference files"
+  err "SKILL.md too long ($lines lines)"
 fi
 
 echo ""

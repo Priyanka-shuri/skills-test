@@ -1,6 +1,5 @@
 {
   "githubOwner": "MYOB-Technology",
-  "allowedOwners": ["MYOB-Technology"],
   "allowedRepoNamePrefixes": [
     "payment-connect",
     "billing-",

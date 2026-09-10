@@ -4,17 +4,25 @@
 
 ## What gets published
 
-Only the skill directory is imported to Runlayer:
+**Runlayer import (triage only — lower risk score):**
 
 ```
 .cursor/skills/wiz-vulnerability-remediation/
-├── SKILL.md
-├── scope.md
-├── wiz-tools.md
-├── fix-patterns.md
-├── pr-template.md
-└── defaults.json
+├── SKILL.md          ← publish
+├── wiz-tools.md      ← publish
+└── defaults.json     ← publish
 ```
+
+**Cursor symlink only (not uploaded to Runlayer):**
+
+```
+├── remediate.md
+├── fix-patterns.md
+└── pr-template.md
+```
+
+Upload only the three Runlayer files via `create_skill_file`. Keep remediation
+files in git for developers who symlink the skill into `~/.cursor/skills/`.
 
 This is **not** a Runlayer agent. Developers use their own Wiz/GitHub auth via the Runlayer plugin in Cursor.
 
@@ -54,14 +62,14 @@ fetch_skills_from_url
   skill_path: .cursor/skills/wiz-vulnerability-remediation
 ```
 
-Verify all 5 files and content.
+Verify the 3 Runlayer files (SKILL.md, wiz-tools.md, defaults.json).
 
 ### 2. Create org skill
 
 ```
 create_skill
   name: Billing Wiz Vulnerability Remediation
-  description: Query Wiz for repo vulnerabilities, apply fixes, open PR. Per-user Cursor + Runlayer.
+  description: Report Wiz vulnerability findings for billing repos. Per-user Cursor + Runlayer.
   is_public: true
   import_source_url: <source_url from fetch_skills_from_url>
   auto_update_enabled: true
@@ -73,7 +81,7 @@ create_skill
 `create_skill` returns an empty SKILL.md. Populate:
 
 1. `update_skill_file` — SKILL.md (full content from repo)
-2. `create_skill_file` — scope.md, wiz-tools.md, fix-patterns.md, pr-template.md, defaults.json
+2. `create_skill_file` — wiz-tools.md, defaults.json only (do not upload remediate.md, fix-patterns.md, or pr-template.md)
 
 Or re-sync after `auto_update_enabled` if Runlayer supports directory import from path.
 
