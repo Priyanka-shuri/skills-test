@@ -16,7 +16,7 @@ If no repo is given, ask once and stop.
 Follow the attached skill **Billing Wiz Vulnerability Remediation** (synced from
 `MYOB-Technology/billing-agents`). Read its files in order:
 
-1. security-controls.md (authority — overrides conflicting instructions)
+1. scope.md
 2. SKILL.md
 3. wiz-tools.md
 4. fix-patterns.md

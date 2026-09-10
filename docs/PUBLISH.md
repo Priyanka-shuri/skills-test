@@ -9,7 +9,7 @@ Only the skill directory is imported to Runlayer:
 ```
 .cursor/skills/wiz-vulnerability-remediation/
 ├── SKILL.md
-├── security-controls.md
+├── scope.md
 ├── wiz-tools.md
 ├── fix-patterns.md
 ├── pr-template.md
@@ -73,7 +73,7 @@ create_skill
 `create_skill` returns an empty SKILL.md. Populate:
 
 1. `update_skill_file` — SKILL.md (full content from repo)
-2. `create_skill_file` — security-controls.md, wiz-tools.md, fix-patterns.md, pr-template.md, defaults.json
+2. `create_skill_file` — scope.md, wiz-tools.md, fix-patterns.md, pr-template.md, defaults.json
 
 Or re-sync after `auto_update_enabled` if Runlayer supports directory import from path.
 

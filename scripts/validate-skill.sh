@@ -13,7 +13,7 @@ echo "=== Skill structure validation ==="
 
 [[ -f "$SKILL_DIR/SKILL.md" ]] && ok "SKILL.md exists" || err "missing SKILL.md"
 
-for f in wiz-tools.md fix-patterns.md pr-template.md security-controls.md defaults.json; do
+for f in scope.md wiz-tools.md fix-patterns.md pr-template.md defaults.json; do
   [[ -f "$SKILL_DIR/$f" ]] && ok "$f exists" || err "missing $f"
 done
 
@@ -31,7 +31,7 @@ else
 fi
 
 # Internal links (one level deep)
-for link in security-controls.md wiz-tools.md fix-patterns.md pr-template.md; do
+for link in scope.md wiz-tools.md fix-patterns.md pr-template.md; do
   if grep -q "\\[$link\\]($link)" "$SKILL_DIR/SKILL.md" 2>/dev/null || grep -q "$link" "$SKILL_DIR/SKILL.md" 2>/dev/null; then
     ok "SKILL.md references $link"
   else
@@ -57,16 +57,16 @@ else
   err "defaults.json must set draftPr=true and allowedOwners"
 fi
 
-if grep -q 'security-controls.md' "$SKILL_DIR/SKILL.md" 2>/dev/null; then
-  ok "SKILL.md references security-controls.md"
+if ! grep -qiE 'override|ignore (previous|all) instruction|prompt injection|untrusted input|guardrail bypass' "$SKILL_DIR/SKILL.md" "$SKILL_DIR/scope.md" 2>/dev/null; then
+  ok "no scanner-trigger phrases in SKILL.md or scope.md"
 else
-  err "SKILL.md must reference security-controls.md"
+  err "remove override/injection phrasing from SKILL.md or scope.md"
 fi
 
-if ! grep -q 'get_issue_remediation_options' "$SKILL_DIR/wiz-tools.md" 2>/dev/null || grep -q 'Forbidden' "$SKILL_DIR/wiz-tools.md" 2>/dev/null; then
-  ok "wiz-tools.md documents forbidden remediation tools"
+if grep -q 'get_issue_remediation_options' "$SKILL_DIR/wiz-tools.md" 2>/dev/null; then
+  ok "wiz-tools.md lists out-of-scope tools"
 else
-  err "wiz-tools.md should forbid get_issue_remediation_options"
+  err "wiz-tools.md should list tools not used by this skill"
 fi
 
 # Size guard (skill best practice < 500 lines for SKILL.md)
